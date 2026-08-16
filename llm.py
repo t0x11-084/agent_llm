@@ -1,4 +1,4 @@
-from nanovllm.engine.llm_engine import LLMEngine
+from agent_llm.engine.llm_engine import LLMEngine
 
 
 class LLM(LLMEngine):

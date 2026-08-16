@@ -4,12 +4,12 @@ import torch.distributed as dist
 from multiprocessing.synchronize import Event
 from multiprocessing.shared_memory import SharedMemory
 
-from nanovllm.config import Config
-from nanovllm.engine.sequence import Sequence
-from nanovllm.models.qwen3 import Qwen3ForCausalLM
-from nanovllm.layers.sampler import Sampler
-from nanovllm.utils.context import set_context, get_context, reset_context
-from nanovllm.utils.loader import load_model
+from agent_llm.config import Config
+from agent_llm.engine.sequence import Sequence
+from agent_llm.models.qwen3 import Qwen3ForCausalLM
+from agent_llm.layers.sampler import Sampler
+from agent_llm.utils.context import set_context, get_context, reset_context
+from agent_llm.utils.loader import load_model
 
 
 class ModelRunner:

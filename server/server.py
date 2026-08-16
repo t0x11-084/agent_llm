@@ -4,7 +4,7 @@ from threading import Lock
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, Field
 
-from nanovllm import LLM, SamplingParams
+from agent_llm.llm import LLM, SamplingParams
 
 
 # ============================================================
