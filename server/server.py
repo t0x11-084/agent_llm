@@ -6,13 +6,12 @@ from pydantic import BaseModel, Field
 
 from nanovllm import LLM, SamplingParams
 
-from third_party_api import generate_with_gpt
 
 # ============================================================
 # 1. nano-vLLM 配置
 # ============================================================
 
-MODEL_PATH = "/home/tjwei/projects/nano-vllm/llms"
+MODEL_PATH = "/home/tjwei/llms/Qwen3-0.6B/"
 
 MAX_MODEL_LEN = 2048
 MAX_NUM_SEQS = 4
@@ -59,32 +58,6 @@ class GenerateRequest(BaseModel):
 class GenerateResponse(BaseModel):
     text: str
     output_tokens: int
-
-
-
-# ============================================================
-# 第三方 GPT 请求格式
-# ============================================================
-
-class GPTGenerateRequest(BaseModel):
-
-    prompt: str = Field(
-        min_length=1,
-    )
-
-    model: str = "gpt-5.2"
-
-    reasoning_effort: str = "low"
-
-
-class GPTGenerateResponse(BaseModel):
-
-    text: str
-
-    model: str
-
-    response_id: str
-
 
 
 # ============================================================
@@ -176,35 +149,3 @@ def generate(request: GenerateRequest):
         output_tokens=len(output["token_ids"]),
     )
 
-# ============================================================
-# 9. 第三方 GPT 推理接口
-# ============================================================
-
-@app.post(
-    "/generate/gpt",
-    response_model=GPTGenerateResponse,
-)
-async def generate_gpt(
-    request: GPTGenerateRequest,
-):
-
-    try:
-
-        result = await generate_with_gpt(
-            prompt=request.prompt,
-            model=request.model,
-            reasoning_effort=request.reasoning_effort,
-        )
-
-    except Exception as exc:
-
-        raise HTTPException(
-            status_code=502,
-            detail=f"Third-party API failed: {exc}",
-        ) from exc
-
-    return GPTGenerateResponse(
-        text=result["text"],
-        model=result["model"],
-        response_id=result["response_id"],
-    )
