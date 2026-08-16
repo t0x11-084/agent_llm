@@ -20,18 +20,10 @@ MODEL_PATH = "/home/tjwei/llms/Qwen3-0.6B/"
 MAX_MODEL_LEN = 2048
 
 # GPU 每个 decode step 最多同时运行多少条 sequence。
-#
-# RTX 4060 + Qwen3-0.6B：
-# 推荐先从 8 开始。
-#
-# 后面测试：
 # 4 -> 8 -> 16
 MAX_NUM_SEQS = 8
 
 # 一次 prefill 最多处理多少 token。
-#
-# 不建议一开始直接堆太高，避免长 prompt 同时到达造成
-# 瞬时显存压力和首 token latency 波动。
 MAX_NUM_BATCHED_TOKENS = 4096
 
 GPU_MEMORY_UTILIZATION = 0.85
@@ -41,11 +33,6 @@ GPU_MEMORY_UTILIZATION = 0.85
 MAX_QUEUE_SIZE = 64
 
 # 最多允许多少请求进入 nano-vLLM scheduler。
-#
-# 注意：
-# 这不是 GPU batch size。
-#
-# 真正 GPU decode batch size 仍然由 MAX_NUM_SEQS 控制。
 MAX_ACTIVE_REQUESTS = 32
 
 
@@ -114,8 +101,6 @@ stats = {
 
 # ============================================================
 # 5. 创建 nano-vLLM
-#
-# 注意：
 # LLM 的创建和之后的推理全部放在同一个 worker thread 中。
 # FastAPI event loop 不直接执行 CUDA 推理。
 # ============================================================
@@ -157,7 +142,7 @@ def create_llm() -> LLM:
 #
 # 它会一直占着控制权直到这一批请求全部结束。
 #
-# 我们现在自己控制：
+# 现在自己控制：
 #
 #     add request
 #     step
